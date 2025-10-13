@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,11 +11,26 @@ public abstract class LogicGate : MonoBehaviour
 
     public abstract bool Evaluate();
 
-    public List<GameObject> GetChildren()
+    protected List<GameObject> GetChildren()
     {
         List<GameObject> list = new();
         for (int i = 0; i < transform.childCount; i++)
             list.Add(transform.GetChild(i).gameObject);
         return list;
     }
+    public void SetInput(int index, bool signal)
+    {
+        inputs[index] = signal;
+    }
+
+    public bool GetInput(int index)
+    {
+        return inputs[index];
+    }
+
+    public bool GetOutput()
+    {
+        return output;
+    }
+
 }
