@@ -6,6 +6,7 @@ public class Wiring : MonoBehaviour
     private GameObject source;
     private GameObject target;
 
+    private Wire wire;
     private LineRenderer lr;
 
     private void OnTouchBegan(Touch touch)
@@ -15,13 +16,14 @@ public class Wiring : MonoBehaviour
         if (hit.collider != null)
         {
             source = hit.collider.gameObject;
-            if (source.CompareTag("InputPin") || source.CompareTag("OutputPin"))
+            if (/*source.CompareTag("InputPin") || */source.CompareTag("OutputPin"))
             {
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-                GameObject dummy = new("dummy", typeof(LineRenderer));
-                dummy.transform.position = ray.origin;
+                GameObject obj = new("Wire", typeof(Wire), typeof(LineRenderer));
+                wire = obj.GetComponent<Wire>();
+                wire.transform.position = ray.origin;
 
-                lr = dummy.GetComponent<LineRenderer>();
+                lr = wire.GetComponent<LineRenderer>();
                 lr.startColor = Color.black;
                 lr.endColor = Color.black;
                 lr.startWidth = source.transform.localScale.x / 5;
@@ -48,31 +50,33 @@ public class Wiring : MonoBehaviour
         if (hit.collider != null)
         {
             target = hit.collider.gameObject;
-            if (target.CompareTag("InputPin") || target.CompareTag("OutputPin"))
+            if (target.CompareTag("InputPin")/* || target.CompareTag("OutputPin")*/)
             {
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
                 lr.SetPosition(1, target.transform.position);
 
-                GameObject obj = new("Wire", typeof(Wire));
-                Wire wire = obj.GetComponent<Wire>();
                 wire.SetSource(source.transform.parent.GetComponent<LogicGate>());
                 wire.SetTarget(target.transform.parent.GetComponent<LogicGate>());
 
                 int index = target.transform.GetSiblingIndex();
                 wire.SetIndex(index);
-
-                wire.AddComponent<LineRenderer>();
-                LineRenderer wlr = wire.GetComponent<LineRenderer>();
-                wlr.material = lr.material;
-                wlr.startColor = lr.startColor;
-                wlr.endColor = lr.endColor;
-                wlr.startWidth = lr.startWidth;
-                wlr.SetPosition(0, lr.GetPosition(0));
-                wlr.SetPosition(1, lr.GetPosition(1));
+            }
+            else
+            {
+                if (wire != null)
+                    Destroy(wire.gameObject);
             }
         }
-        
-        Destroy(GameObject.Find("dummy"));
+        else
+        {
+            if (wire != null)
+                Destroy(wire.gameObject);
+        }
+
+        wire = null;
+        lr = null;
+        source = null;
+        target = null;
     }
 
 
