@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Wiring : MonoBehaviour
@@ -19,7 +18,7 @@ public class Wiring : MonoBehaviour
             if (/*source.CompareTag("InputPin") || */source.CompareTag("OutputPin"))
             {
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-                GameObject obj = new("Wire", typeof(Wire), typeof(LineRenderer));
+                GameObject obj = new("Wire", typeof(LineRenderer), typeof(Wire));
                 wire = obj.GetComponent<Wire>();
                 wire.transform.position = ray.origin;
 

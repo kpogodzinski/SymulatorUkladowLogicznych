@@ -6,6 +6,8 @@ public class Wire : MonoBehaviour
     private LogicGate target;
     private int targetInputIndex;
 
+    private LineRenderer lr;
+
     public void SetSource(LogicGate source)
     {
         this.source = source;
@@ -18,7 +20,12 @@ public class Wire : MonoBehaviour
 
     public void SetIndex(int index)
     {
-        this.targetInputIndex = index;
+        targetInputIndex = index;
+    }
+
+    private void Awake()
+    {
+        lr = GetComponent<LineRenderer>();
     }
 
     private void Update()
@@ -28,5 +35,9 @@ public class Wire : MonoBehaviour
 
         bool signal = source.GetOutput();
         target.SetInput(targetInputIndex, signal);
+
+        int childCount = source.transform.childCount;
+        lr.SetPosition(0, source.transform.GetChild(childCount - 1).position);
+        lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position);
     }
 }
