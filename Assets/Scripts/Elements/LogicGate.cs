@@ -3,11 +3,6 @@ using UnityEngine;
 
 public abstract class LogicGate : Element
 {
-    //protected List<bool> inputs;
-    //protected bool output;
-    //protected short inputCount;
-    //protected List<GameObject> pins;
-
     public abstract bool Evaluate();
 
     protected List<GameObject> GetChildren()
@@ -17,20 +12,6 @@ public abstract class LogicGate : Element
             list.Add(transform.GetChild(i).gameObject);
         return list;
     }
-    //public void SetInput(int index, bool signal)
-    //{
-    //    inputs[index] = signal;
-    //}
-
-    //public bool GetInput(int index)
-    //{
-    //    return inputs[index];
-    //}
-
-    //public bool GetOutput()
-    //{
-    //    return output;
-    //}
 
     protected void Awake()
     {
@@ -47,17 +28,17 @@ public abstract class LogicGate : Element
         pins[^1].GetComponent<SpriteRenderer>().color = output ? Color.green : Color.red;
 
 
-        ///// TESTING PURPOSES /////
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            inputs[0] ^= true;
-            //Debug.Log("1");
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            inputs[1] ^= true;
-            //Debug.Log("2");
-        }
-        ////////////////////////////
+        /////// TESTING PURPOSES /////
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    inputs[0] ^= true;
+        //    //Debug.Log("1");
+        //}
+        //if (Input.GetKeyDown(KeyCode.W))
+        //{
+        //    inputs[1] ^= true;
+        //    //Debug.Log("2");
+        //}
+        //////////////////////////////
     }
 }

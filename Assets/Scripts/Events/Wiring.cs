@@ -7,7 +7,6 @@ public class Wiring : MonoBehaviour
 
     [SerializeField]
     private Wire prefab;
-
     private Wire wire;
     private LineRenderer lr;
 
