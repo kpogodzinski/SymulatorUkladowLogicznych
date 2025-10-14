@@ -56,8 +56,8 @@ public class Wiring : MonoBehaviour
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
                 lr.SetPosition(1, target.transform.position);
 
-                wire.SetSource(source.transform.parent.GetComponent<LogicGate>());
-                wire.SetTarget(target.transform.parent.GetComponent<LogicGate>());
+                wire.SetSource(source.transform.parent.GetComponent<Element>());
+                wire.SetTarget(target.transform.parent.GetComponent<Element>());
 
                 int index = target.transform.GetSiblingIndex();
                 wire.SetIndex(index);

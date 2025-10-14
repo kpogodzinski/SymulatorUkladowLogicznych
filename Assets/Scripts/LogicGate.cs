@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class LogicGate : MonoBehaviour
+public abstract class LogicGate : Element
 {
-    protected List<bool> inputs;
-    protected bool output;
-    protected short inputCount;
-    protected List<GameObject> pins;
+    //protected List<bool> inputs;
+    //protected bool output;
+    //protected short inputCount;
+    //protected List<GameObject> pins;
 
     public abstract bool Evaluate();
 
@@ -17,20 +17,20 @@ public abstract class LogicGate : MonoBehaviour
             list.Add(transform.GetChild(i).gameObject);
         return list;
     }
-    public void SetInput(int index, bool signal)
-    {
-        inputs[index] = signal;
-    }
+    //public void SetInput(int index, bool signal)
+    //{
+    //    inputs[index] = signal;
+    //}
 
-    public bool GetInput(int index)
-    {
-        return inputs[index];
-    }
+    //public bool GetInput(int index)
+    //{
+    //    return inputs[index];
+    //}
 
-    public bool GetOutput()
-    {
-        return output;
-    }
+    //public bool GetOutput()
+    //{
+    //    return output;
+    //}
 
     protected void Awake()
     {
@@ -51,12 +51,12 @@ public abstract class LogicGate : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             inputs[0] ^= true;
-            Debug.Log("1");
+            //Debug.Log("1");
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
             inputs[1] ^= true;
-            Debug.Log("2");
+            //Debug.Log("2");
         }
         ////////////////////////////
     }

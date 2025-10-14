@@ -2,18 +2,18 @@ using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
-    private LogicGate source;
-    private LogicGate target;
+    private Element source;
+    private Element target;
     private int targetInputIndex;
 
     private LineRenderer lr;
 
-    public void SetSource(LogicGate source)
+    public void SetSource(Element source)
     {
         this.source = source;
     }
 
-    public void SetTarget(LogicGate target)
+    public void SetTarget(Element target)
     {
         this.target = target;
     }

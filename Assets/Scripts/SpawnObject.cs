@@ -3,10 +3,10 @@ using UnityEngine;
 public class SpawnObject : MonoBehaviour
 {
     [SerializeField]
-    private GameObject andGatePrefab;
+    private GameObject prefab;
 
     public void Spawn()
     {
-        Instantiate(andGatePrefab, Vector3.zero, Quaternion.identity);
+        Instantiate(prefab, Vector3.zero, Quaternion.identity);
     }
 }
