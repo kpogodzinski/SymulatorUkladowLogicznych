@@ -5,26 +5,13 @@ public abstract class LogicGate : Element
 {
     public abstract bool Evaluate();
 
-    protected List<GameObject> GetChildren()
-    {
-        List<GameObject> list = new();
-        for (int i = 0; i < transform.childCount; i++)
-            list.Add(transform.GetChild(i).gameObject);
-        return list;
-    }
-
-    protected void Awake()
-    {
-        inputs = new(2) { false, false };
-        pins = GetChildren();
-    }
-
     protected void Update()
     {
         output = Evaluate();
 
-        pins[0].GetComponent<SpriteRenderer>().color = inputs[0] ? Color.green : Color.red;
-        pins[1].GetComponent<SpriteRenderer>().color = inputs[1] ? Color.green : Color.red;
+        for (int i = 0; i < pins.Count - 1; i++)
+            pins[i].GetComponent<SpriteRenderer>().color = inputs[i] ? Color.green : Color.red;
+
         pins[^1].GetComponent<SpriteRenderer>().color = output ? Color.green : Color.red;
 
 

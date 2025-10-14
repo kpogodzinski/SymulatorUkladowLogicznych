@@ -1,5 +1,3 @@
-using System.Linq;
-
 public class XorGate : LogicGate
 {
     public override bool Evaluate()

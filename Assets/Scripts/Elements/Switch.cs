@@ -7,17 +7,6 @@ public class Switch : Element
         output = value;
     }
 
-    private void Awake()
-    {
-        inputCount = 0;
-        inputs = null;
-
-        pins = new()
-        {
-            transform.GetChild(0).gameObject
-        };
-    }
-
     private void Update()
     {
         pins[0].GetComponent<SpriteRenderer>().color = output ? Color.green : Color.red;

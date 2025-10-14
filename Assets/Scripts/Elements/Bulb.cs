@@ -2,16 +2,6 @@ using UnityEngine;
 
 public class Bulb : Element
 {
-    private void Awake()
-    {
-        inputCount = 1;
-        inputs = new(1) { false };
-        pins = new()
-        {
-            transform.GetChild(0).gameObject
-        };
-    }
-
     private void Update()
     {
         pins[0].GetComponent<SpriteRenderer>().color = inputs[0] ? Color.green : Color.red;
