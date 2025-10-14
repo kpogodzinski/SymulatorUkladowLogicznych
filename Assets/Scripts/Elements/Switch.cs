@@ -20,6 +20,6 @@ public class Switch : Element
 
     private void Update()
     {
-        pins[0].GetComponent<SpriteRenderer>().color = GetComponent<SpriteChanger>().GetIndex() == 1 ? Color.green : Color.red;
+        pins[0].GetComponent<SpriteRenderer>().color = output ? Color.green : Color.red;
     }
 }
