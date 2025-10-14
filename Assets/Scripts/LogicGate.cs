@@ -6,7 +6,6 @@ public abstract class LogicGate : MonoBehaviour
     protected List<bool> inputs;
     protected bool output;
     protected short inputCount;
-
     protected List<GameObject> pins;
 
     public abstract bool Evaluate();
@@ -33,4 +32,32 @@ public abstract class LogicGate : MonoBehaviour
         return output;
     }
 
+    protected void Awake()
+    {
+        inputs = new(2) { false, false };
+        pins = GetChildren();
+    }
+
+    protected void Update()
+    {
+        output = Evaluate();
+
+        pins[0].GetComponent<SpriteRenderer>().color = inputs[0] ? Color.green : Color.red;
+        pins[1].GetComponent<SpriteRenderer>().color = inputs[1] ? Color.green : Color.red;
+        pins[^1].GetComponent<SpriteRenderer>().color = output ? Color.green : Color.red;
+
+
+        ///// TESTING PURPOSES /////
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            inputs[0] ^= true;
+            Debug.Log("1");
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            inputs[1] ^= true;
+            Debug.Log("2");
+        }
+        ////////////////////////////
+    }
 }

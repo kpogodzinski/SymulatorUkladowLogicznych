@@ -5,6 +5,9 @@ public class Wiring : MonoBehaviour
     private GameObject source;
     private GameObject target;
 
+    [SerializeField]
+    private Wire prefab;
+
     private Wire wire;
     private LineRenderer lr;
 
@@ -18,8 +21,7 @@ public class Wiring : MonoBehaviour
             if (/*source.CompareTag("InputPin") || */source.CompareTag("OutputPin"))
             {
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-                GameObject obj = new("Wire", typeof(LineRenderer), typeof(Wire));
-                wire = obj.GetComponent<Wire>();
+                wire = Instantiate(prefab);
                 wire.transform.position = ray.origin;
 
                 lr = wire.GetComponent<LineRenderer>();
@@ -46,7 +48,7 @@ public class Wiring : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
-        if (hit.collider != null)
+        if (hit.collider != null && lr != null)
         {
             target = hit.collider.gameObject;
             if (target.CompareTag("InputPin")/* || target.CompareTag("OutputPin")*/)
