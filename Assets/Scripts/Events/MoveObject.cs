@@ -62,6 +62,9 @@ public class MoveObject : MonoBehaviour
         {
             touchedObject.transform.localScale /= 1.2f;
             touchedObject.GetComponent<SpriteRenderer>().color += new Color(0, 0, 0, 0.5f);
+            touchedObject.GetComponent<SpriteRenderer>().sortingLayerName = "Default";
+            foreach (SpriteRenderer child in touchedObject.transform.GetComponentsInChildren<SpriteRenderer>())
+                child.sortingLayerName = "Default";
             touchedObject.tag = "Element";
 
             if (touchedObject.GetComponent<LogicGate>() != null)
