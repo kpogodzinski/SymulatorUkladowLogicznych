@@ -1,7 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MoveObject : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject scrollView;
+    private ScrollRect scrollRect;
+
     private GameObject touchedObject;
     private Vector2 offset;
     private bool moving;
@@ -10,6 +15,7 @@ public class MoveObject : MonoBehaviour
     {
         touchedObject = null;
         moving = false;
+        scrollRect = scrollView.GetComponent<ScrollRect>();
     }
 
     private void OnTouchBegan(Touch touch)
@@ -19,12 +25,24 @@ public class MoveObject : MonoBehaviour
 
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
-        if (hit.collider != null && hit.collider.gameObject.CompareTag("Element"))
+        if (hit.collider != null)
         {
-            touchedObject = hit.collider.gameObject;
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-            Vector2 objectPosition = touchedObject.transform.position;
-            offset = objectPosition - touchPosition;
+            
+            if (hit.collider.gameObject.CompareTag("Element"))
+            {
+                touchedObject = hit.collider.gameObject;
+                Vector2 objectPosition = touchedObject.transform.position;
+                offset = objectPosition - touchPosition;
+            }
+            else if (hit.collider.gameObject.CompareTag("NewElement"))
+            {
+                scrollRect.enabled = false;
+                touchedObject = Instantiate(hit.collider.gameObject, touchPosition, Quaternion.identity, null);
+                touchedObject.transform.localScale = 0.5f * 1.2f * Vector3.one;
+                touchedObject.GetComponent<SpriteRenderer>().color -= new Color(0, 0, 0, 0.5f);
+                offset = Vector3.zero;
+            }
             moving = true;
         }
     }
@@ -40,6 +58,23 @@ public class MoveObject : MonoBehaviour
 
     private void OnTouchEnded()
     {
+        if (touchedObject != null && touchedObject.CompareTag("NewElement"))
+        {
+            touchedObject.transform.localScale /= 1.2f;
+            touchedObject.GetComponent<SpriteRenderer>().color += new Color(0, 0, 0, 0.5f);
+            touchedObject.tag = "Element";
+
+            if (touchedObject.GetComponent<LogicGate>() != null)
+                touchedObject.GetComponent<LogicGate>().enabled = true;
+            if (touchedObject.GetComponent<Switch>() != null)
+                touchedObject.GetComponent<Switch>().enabled = true;
+            if (touchedObject.GetComponent<ToggleSwitch>() != null)
+                touchedObject.GetComponent <ToggleSwitch>().enabled = true;
+            if (touchedObject.GetComponent<Bulb>() != null)
+                touchedObject.GetComponent<Bulb>().enabled = true;
+
+            scrollRect.enabled = true;
+        }
         moving = false;
         touchedObject = null;
     }

@@ -17,7 +17,7 @@ public class Wiring : MonoBehaviour
         if (hit.collider != null)
         {
             source = hit.collider.gameObject;
-            if (/*source.CompareTag("InputPin") || */source.CompareTag("OutputPin"))
+            if (/*source.CompareTag("InputPin") || */source.CompareTag("OutputPin") && source.transform.parent.CompareTag("Element"))
             {
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
                 wire = Instantiate(prefab);
@@ -50,7 +50,7 @@ public class Wiring : MonoBehaviour
         if (hit.collider != null && lr != null)
         {
             target = hit.collider.gameObject;
-            if (target.CompareTag("InputPin")/* || target.CompareTag("OutputPin")*/)
+            if (target.CompareTag("InputPin") && target.transform.parent.CompareTag("Element")/* || target.CompareTag("OutputPin")*/)
             {
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
                 lr.SetPosition(1, target.transform.position);
