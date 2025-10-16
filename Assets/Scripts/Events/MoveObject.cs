@@ -31,6 +31,9 @@ public class MoveObject : MonoBehaviour
             
             if (hit.collider.gameObject.CompareTag("Element"))
             {
+                if (!PlayerPrefs.GetString("TouchMode").Equals("Moving"))
+                    return;
+
                 touchedObject = hit.collider.gameObject;
                 Vector2 objectPosition = touchedObject.transform.position;
                 offset = objectPosition - touchPosition;

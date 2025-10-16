@@ -11,6 +11,9 @@ public class ToggleSwitch : MonoBehaviour
 
     private void Update()
     {
+        if (!PlayerPrefs.GetString("TouchMode").Equals("Interaction"))
+            return;
+
         if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);
