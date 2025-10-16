@@ -54,5 +54,6 @@ public class Wire : MonoBehaviour
         int childCount = source.transform.childCount;
         lr.SetPosition(0, source.transform.GetChild(childCount - 1).position);
         lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position);
+        lr.startColor = lr.endColor = source.transform.GetChild(childCount-1).GetComponent<SpriteRenderer>().color;
     }
 }
