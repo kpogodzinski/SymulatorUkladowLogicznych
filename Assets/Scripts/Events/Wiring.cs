@@ -57,6 +57,7 @@ public class Wiring : MonoBehaviour
 
                 wire.SetSource(source.transform.parent.GetComponent<Element>());
                 wire.SetTarget(target.transform.parent.GetComponent<Element>());
+                wire.SetConnected(true);
 
                 int index = target.transform.GetSiblingIndex();
                 wire.SetIndex(index);

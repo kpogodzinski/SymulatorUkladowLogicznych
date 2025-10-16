@@ -5,6 +5,7 @@ public class Wire : MonoBehaviour
     private Element source;
     private Element target;
     private int targetInputIndex;
+    private bool connected;
 
     private LineRenderer lr;
 
@@ -23,15 +24,29 @@ public class Wire : MonoBehaviour
         targetInputIndex = index;
     }
 
+    public void SetConnected(bool connected)
+    {
+        this.connected = connected;
+    }
+
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();
+        connected = false;
     }
 
     private void Update()
     {
         if (source == null || target == null)
+        {
+            if (connected)
+            {
+                if (target != null)
+                    target.SetInput(targetInputIndex, false);
+                Destroy(gameObject);
+            }
             return;
+        }
 
         bool signal = source.GetOutput();
         target.SetInput(targetInputIndex, signal);
