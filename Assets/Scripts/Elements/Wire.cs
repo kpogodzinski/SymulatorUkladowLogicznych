@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Wire : MonoBehaviour
@@ -8,6 +9,7 @@ public class Wire : MonoBehaviour
     private bool connected;
 
     private LineRenderer lr;
+    private PolygonCollider2D pc;
 
     public void SetSource(Element source)
     {
@@ -32,6 +34,7 @@ public class Wire : MonoBehaviour
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();
+        pc = GetComponent<PolygonCollider2D>();
         connected = false;
     }
 
@@ -40,11 +43,7 @@ public class Wire : MonoBehaviour
         if (source == null || target == null)
         {
             if (connected)
-            {
-                if (target != null)
-                    target.SetInput(targetInputIndex, false);
                 Destroy(gameObject);
-            }
             return;
         }
 
@@ -54,6 +53,25 @@ public class Wire : MonoBehaviour
         int childCount = source.transform.childCount;
         lr.SetPosition(0, source.transform.GetChild(childCount - 1).position);
         lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position);
+
+        Vector2 direction = (lr.GetPosition(1) - lr.GetPosition(0)).normalized;
+        Vector2 perpDirection = Vector2.Perpendicular(direction);
+        float lineWidth = lr.startWidth;
+        pc.SetPath(0, new List<Vector2>()
+        {
+            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection,
+            (Vector2)lr.GetPosition(1) + lineWidth * perpDirection,
+            (Vector2)lr.GetPosition(1) - lineWidth * perpDirection,
+            (Vector2)lr.GetPosition(0) - lineWidth * perpDirection,
+            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection
+
+        });
+        pc.offset = -1 * lr.transform.position;
         lr.startColor = lr.endColor = source.transform.GetChild(childCount-1).GetComponent<SpriteRenderer>().color;
+    }
+    private void OnDestroy()
+    {
+        if (target != null)
+            target.SetInput(targetInputIndex, false);
     }
 }
