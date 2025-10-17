@@ -4,29 +4,38 @@ using UnityEngine.UI;
 public class MoveObject : MonoBehaviour
 {
     [SerializeField]
+    private GameObject workspace;
+    [SerializeField]
     private GameObject scrollView;
     private ScrollRect scrollRect;
 
     private GameObject touchedObject;
     private Vector2 offset;
-    private bool moving;
+    private bool objectMoving;
 
     private void Awake()
     {
         touchedObject = null;
-        moving = false;
+        objectMoving = false;
         scrollRect = scrollView.GetComponent<ScrollRect>();
+    }
+
+    public bool IsMoving()
+    {
+        return objectMoving;
     }
 
     private void OnTouchBegan(Touch touch)
     {
-        if (moving)
+        if (objectMoving)
             return;
 
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
         if (hit.collider != null)
         {
+            objectMoving = true;
+
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
             
             if (hit.collider.gameObject.CompareTag("Element"))
@@ -41,18 +50,17 @@ public class MoveObject : MonoBehaviour
             else if (hit.collider.gameObject.CompareTag("NewElement"))
             {
                 scrollRect.enabled = false;
-                touchedObject = Instantiate(hit.collider.gameObject, touchPosition, Quaternion.identity, null);
+                touchedObject = Instantiate(hit.collider.gameObject, touchPosition, Quaternion.identity, workspace.transform);
                 touchedObject.transform.localScale = 0.5f * 1.2f * Vector3.one;
                 touchedObject.GetComponent<SpriteRenderer>().color -= new Color(0, 0, 0, 0.5f);
                 offset = Vector3.zero;
             }
-            moving = true;
         }
     }
 
     private void OnTouchMoved(Touch touch)
     {
-        if (!moving || touchedObject == null)
+        if (!objectMoving || touchedObject == null)
             return;
 
         Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
@@ -81,7 +89,7 @@ public class MoveObject : MonoBehaviour
 
             scrollRect.enabled = true;
         }
-        moving = false;
+        objectMoving = false;
         touchedObject = null;
     }
 

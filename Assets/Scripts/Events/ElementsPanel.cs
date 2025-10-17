@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ElementsPanel : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class ElementsPanel : MonoBehaviour
 
     private IEnumerator SlidePanel(int direction) // direction: -1 = left, 1 = right
     {
+        EventSystem.current.GetComponent<CameraMovement>().enabled = false;
+
         Vector2 oldButtonPosition = transform.position;
         Quaternion oldTextRotation = buttonText.transform.rotation;
         Vector2 oldPanelPosition = elementsPanel.transform.position;
@@ -50,8 +53,9 @@ public class ElementsPanel : MonoBehaviour
         transform.position = newButtonPosition;
         elementsPanel.transform.position = newPanelPosition;
         buttonText.transform.rotation = newTextRotation;
-        //yield return null;
         visible = !visible;
+
+        EventSystem.current.GetComponent<CameraMovement>().enabled = true;
     }
 
     public void OnButtonClick()

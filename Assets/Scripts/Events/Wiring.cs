@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Wiring : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject workspace;
+
     private GameObject source;
     private GameObject target;
 
@@ -20,7 +23,7 @@ public class Wiring : MonoBehaviour
             if (/*source.CompareTag("InputPin") || */source.CompareTag("OutputPin") && source.transform.parent.CompareTag("Element"))
             {
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-                wire = Instantiate(prefab);
+                wire = Instantiate(prefab, workspace.transform);
                 wire.transform.position = ray.origin;
 
                 lr = wire.GetComponent<LineRenderer>();
