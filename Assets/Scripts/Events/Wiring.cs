@@ -29,7 +29,8 @@ public class Wiring : MonoBehaviour
                 lr = wire.GetComponent<LineRenderer>();
                 lr.startColor = Color.black;
                 lr.endColor = Color.black;
-                lr.startWidth = source.transform.localScale.x / 5;
+                lr.startWidth = transform.parent.parent.localScale.x * source.transform.localScale.x / 5;
+                wire.SetInitialWidth(lr.startWidth);
                 lr.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
                 lr.SetPosition(0, source.transform.position);
                 lr.SetPosition(1, touchPosition);
