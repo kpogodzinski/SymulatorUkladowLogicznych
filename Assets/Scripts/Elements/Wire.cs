@@ -10,7 +10,6 @@ public class Wire : MonoBehaviour
 
     private LineRenderer lr;
     private PolygonCollider2D pc;
-    private float initialWidth;
 
     public void SetSource(Element source)
     {
@@ -25,11 +24,6 @@ public class Wire : MonoBehaviour
     public void SetIndex(int index)
     {
         targetInputIndex = index;
-    }
-
-    public void SetInitialWidth(float width)
-    {
-        initialWidth = width;
     }
 
     public void SetConnected(bool connected)
@@ -59,7 +53,7 @@ public class Wire : MonoBehaviour
         int childCount = source.transform.childCount;
         lr.SetPosition(0, source.transform.GetChild(childCount - 1).position);
         lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position);
-        lr.startWidth = initialWidth * transform.parent.parent.localScale.x;
+        lr.startWidth = (source.transform.localScale.x / 5) * transform.parent.parent.localScale.x;
 
         Vector2 direction = (lr.GetPosition(1) - lr.GetPosition(0)).normalized;
         Vector2 perpDirection = Vector2.Perpendicular(direction);
