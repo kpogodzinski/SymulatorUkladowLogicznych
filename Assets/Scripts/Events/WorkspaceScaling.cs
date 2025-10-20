@@ -4,20 +4,32 @@ using UnityEngine.EventSystems;
 public class WorkspaceScaling : MonoBehaviour
 {
     private bool beganOverUI;
-    private float currentDistance;
+    private float initialDistance;
+    private Vector3 initialPosition;
+    private Vector3 initialScale;
+    private Vector3 touchPivot;
 
     private void OnTouchBegan(Touch touch0, Touch touch1)
     {
-        currentDistance = (touch1.position - touch0.position).magnitude;
+        initialDistance = (touch1.position - touch0.position).magnitude;
+        initialPosition = transform.position;
+        initialScale = transform.localScale;
+
+        touchPivot = Vector2.Lerp(
+            Camera.main.ScreenToWorldPoint(touch0.position),
+            Camera.main.ScreenToWorldPoint(touch1.position),
+            0.5f);
     }
 
     private void OnTouchMoved(Touch touch0, Touch touch1)
     {
         float newDistance = (touch1.position - touch0.position).magnitude;
-        float distanceRatio = newDistance / currentDistance;
+        float distanceRatio = newDistance / initialDistance;
 
-        transform.localScale *= distanceRatio;
-        currentDistance = newDistance;
+        Vector3 newScale = initialScale * distanceRatio;
+        Vector3 newPosition = touchPivot + (initialPosition - touchPivot) * (newScale.x / initialScale.x);
+        transform.localScale = newScale;
+        transform.position = newPosition;
     }
 
     private void OnTouchEnded()
