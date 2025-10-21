@@ -50,9 +50,10 @@ public class MoveObject : MonoBehaviour
             else if (hit.collider.gameObject.CompareTag("NewElement"))
             {
                 scrollRect.enabled = false;
-                touchedObject = Instantiate(hit.collider.gameObject, touchPosition, Quaternion.identity, workspace.transform);
+                touchedObject = Instantiate(hit.collider.gameObject, touchPosition, Quaternion.identity, GameObject.Find("Canvas").transform);
+                touchedObject.GetComponent<RectTransform>().sizeDelta = new Vector2(512f, 512f);
                 touchedObject.transform.localScale = 0.5f * 1.2f * Vector3.one;
-                touchedObject.GetComponent<SpriteRenderer>().color -= new Color(0, 0, 0, 0.5f);
+                touchedObject.GetComponent<Image>().color -= new Color(0, 0, 0, 0.5f);
                 offset = Vector3.zero;
             }
         }
@@ -72,21 +73,9 @@ public class MoveObject : MonoBehaviour
         if (touchedObject != null && touchedObject.CompareTag("NewElement"))
         {
             touchedObject.transform.localScale /= 1.2f;
-            touchedObject.GetComponent<SpriteRenderer>().color += new Color(0, 0, 0, 0.5f);
-            touchedObject.GetComponent<SpriteRenderer>().sortingLayerName = "Default";
-            foreach (SpriteRenderer child in touchedObject.transform.GetComponentsInChildren<SpriteRenderer>())
-                child.sortingLayerName = "Default";
-            touchedObject.tag = "Element";
-
-            if (touchedObject.GetComponent<LogicGate>() != null)
-                touchedObject.GetComponent<LogicGate>().enabled = true;
-            if (touchedObject.GetComponent<Switch>() != null)
-                touchedObject.GetComponent<Switch>().enabled = true;
-            if (touchedObject.GetComponent<ToggleSwitch>() != null)
-                touchedObject.GetComponent <ToggleSwitch>().enabled = true;
-            if (touchedObject.GetComponent<Bulb>() != null)
-                touchedObject.GetComponent<Bulb>().enabled = true;
-
+            touchedObject.GetComponent<Image>().color += new Color(0, 0, 0, 0.5f);
+            touchedObject.GetComponent<SpawnObject>().Spawn(touchedObject.transform.position);
+            Destroy(touchedObject);
             scrollRect.enabled = true;
         }
         objectMoving = false;

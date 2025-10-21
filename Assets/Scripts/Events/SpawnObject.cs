@@ -7,8 +7,8 @@ public class SpawnObject : MonoBehaviour
     [SerializeField]
     private GameObject prefab;
 
-    public void Spawn()
+    public void Spawn(Vector2 position)
     {
-        Instantiate(prefab, Vector3.zero, Quaternion.identity, workspace.transform);
+        Instantiate(prefab, position, Quaternion.identity, workspace.transform);
     }
 }
