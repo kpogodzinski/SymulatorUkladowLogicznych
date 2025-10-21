@@ -17,14 +17,14 @@ public class ElementsPanel : MonoBehaviour
     private void Awake()
     {
         visible = false;
-        animationLength = 0.3f;
+        animationLength = 0.5f;
 
         buttonText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
         Vector3[] corners = new Vector3[4];
         RectTransform rt = elementsPanel.GetComponent<RectTransform>();
         rt.GetWorldCorners(corners);
-        width = Vector3.Distance(corners[2], corners[1]) * 1.2f;
+        width = Vector3.Distance(corners[2], corners[1]) * 1.3f;
     }
 
     private IEnumerator SlidePanel(int direction) // direction: -1 = left, 1 = right
