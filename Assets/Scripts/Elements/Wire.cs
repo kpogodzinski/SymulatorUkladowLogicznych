@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class Wire : MonoBehaviour
 {
@@ -57,7 +58,7 @@ public class Wire : MonoBehaviour
         target.SetInput(targetInputIndex, signal);
 
         int childCount = source.transform.childCount;
-        lr.SetPosition(0, source.transform.GetChild(childCount - 1).position);
+        lr.SetPosition(0, source.transform.GetChild(source.GetInputCount() + sourceOutputIndex).position);
         lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position);
         lr.startWidth = (source.transform.localScale.x / 5) * transform.parent.localScale.x;
 
@@ -74,7 +75,7 @@ public class Wire : MonoBehaviour
 
         });
         pc.offset = -1 * lr.transform.position;
-        lr.startColor = lr.endColor = source.transform.GetChild(childCount-1).GetComponent<SpriteRenderer>().color;
+        lr.startColor = lr.endColor = source.transform.GetChild(source.GetInputCount() + sourceOutputIndex).GetComponent<SpriteRenderer>().color;
     }
     private void OnDestroy()
     {
