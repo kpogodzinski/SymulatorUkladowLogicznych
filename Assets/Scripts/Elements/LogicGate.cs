@@ -7,25 +7,11 @@ public abstract class LogicGate : Element
 
     protected void Update()
     {
-        output = Evaluate();
+        outputs[0] = Evaluate();
 
         for (int i = 0; i < pins.Count - 1; i++)
             pins[i].GetComponent<SpriteRenderer>().color = inputs[i] ? Color.green : Color.red;
 
-        pins[^1].GetComponent<SpriteRenderer>().color = output ? Color.green : Color.red;
-
-
-        /////// TESTING PURPOSES /////
-        //if (Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    inputs[0] ^= true;
-        //    //Debug.Log("1");
-        //}
-        //if (Input.GetKeyDown(KeyCode.W))
-        //{
-        //    inputs[1] ^= true;
-        //    //Debug.Log("2");
-        //}
-        //////////////////////////////
+        pins[^1].GetComponent<SpriteRenderer>().color = outputs[0] ? Color.green : Color.red;
     }
 }

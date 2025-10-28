@@ -25,7 +25,7 @@ public class ToggleSwitch : MonoBehaviour
                 if (hit.collider != null && hit.collider.gameObject.CompareTag("Element") && hit.collider.gameObject == this.gameObject)
                 {
                     GetComponent<SpriteChanger>().NextSprite();
-                    sw.SetOutput(!sw.GetOutput());
+                    sw.SetOutput(!sw.GetOutput(0));
                 }
             }
         }

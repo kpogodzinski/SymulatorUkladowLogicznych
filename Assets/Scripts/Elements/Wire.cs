@@ -5,6 +5,7 @@ public class Wire : MonoBehaviour
 {
     private Element source;
     private Element target;
+    private int sourceOutputIndex;
     private int targetInputIndex;
     private bool connected;
 
@@ -21,7 +22,12 @@ public class Wire : MonoBehaviour
         this.target = target;
     }
 
-    public void SetIndex(int index)
+    public void SetSourceIndex(int index)
+    {
+        sourceOutputIndex = index;
+    }
+
+    public void SetTargetIndex(int index)
     {
         targetInputIndex = index;
     }
@@ -47,7 +53,7 @@ public class Wire : MonoBehaviour
             return;
         }
 
-        bool signal = source.GetOutput();
+        bool signal = source.GetOutput(sourceOutputIndex);
         target.SetInput(targetInputIndex, signal);
 
         int childCount = source.transform.childCount;

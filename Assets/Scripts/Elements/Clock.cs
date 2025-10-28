@@ -8,7 +8,7 @@ public class Clock : Element
 
     private void Pulse()
     {
-        output = !output;
+        outputs[0] = !outputs[0];
     }
 
     private void Start()
@@ -18,6 +18,6 @@ public class Clock : Element
 
     private void Update()
     {
-        pins[0].GetComponent<SpriteRenderer>().color = output ? Color.green : Color.red;
+        pins[0].GetComponent<SpriteRenderer>().color = outputs[0] ? Color.green : Color.red;
     }
 }

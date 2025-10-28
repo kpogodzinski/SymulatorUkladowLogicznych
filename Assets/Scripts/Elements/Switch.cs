@@ -4,11 +4,11 @@ public class Switch : Element
 {
     public void SetOutput(bool value)
     {
-        output = value;
+        outputs[0] = value;
     }
 
     private void Update()
     {
-        pins[0].GetComponent<SpriteRenderer>().color = output ? Color.green : Color.red;
+        pins[0].GetComponent<SpriteRenderer>().color = outputs[0] ? Color.green : Color.red;
     }
 }

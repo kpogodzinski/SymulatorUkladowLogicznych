@@ -4,10 +4,12 @@ using UnityEngine;
 public abstract class Element : MonoBehaviour
 {
     [SerializeField]
-    protected short inputCount;
+    protected int inputCount;
+    [SerializeField]
+    protected int outputCount;
 
     protected List<bool> inputs;
-    protected bool output;
+    protected List<bool> outputs;
     protected List<GameObject> pins;
 
     public void SetInput(int index, bool signal)
@@ -20,9 +22,14 @@ public abstract class Element : MonoBehaviour
         return inputs[index];
     }
 
-    public bool GetOutput()
+    public int GetInputCount()
     {
-        return output;
+        return inputCount;
+    }
+
+    public bool GetOutput(int index)
+    {
+        return outputs[index];
     }
 
     protected List<GameObject> GetChildren()
@@ -44,6 +51,17 @@ public abstract class Element : MonoBehaviour
         else
         {
             inputs = null;
+        }
+
+        if (outputCount > 0)
+        {
+            outputs = new(outputCount);
+            for (int i = 0; i < outputCount; i++)
+                outputs.Add(false);
+        }
+        else
+        {
+            outputs = null;
         }
 
         pins = GetChildren();

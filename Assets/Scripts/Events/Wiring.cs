@@ -25,6 +25,7 @@ public class Wiring : MonoBehaviour
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
                 wire = Instantiate(prefab, workspace.transform);
                 wire.transform.position = ray.origin;
+                wire.SetSourceIndex(source.transform.GetSiblingIndex() - source.GetComponentInParent<Element>().GetInputCount());
 
                 lr = wire.GetComponent<LineRenderer>();
                 lr.startColor = Color.black;
@@ -63,7 +64,7 @@ public class Wiring : MonoBehaviour
                 wire.SetConnected(true);
 
                 int index = target.transform.GetSiblingIndex();
-                wire.SetIndex(index);
+                wire.SetTargetIndex(index);
             }
             else
             {

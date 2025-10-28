@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputCount: 2
+  outputCount: 1
 --- !u!1001 &2787030992120423307
 PrefabInstance:
   m_ObjectHideFlags: 0

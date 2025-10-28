@@ -104,6 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputCount: 0
+  outputCount: 1
   frequency: 0.2
 --- !u!61 &4310200090357008888
 BoxCollider2D:
