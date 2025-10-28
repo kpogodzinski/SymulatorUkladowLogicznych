@@ -1,6 +1,4 @@
-using System;
-
-public class RSLatch : Latch
+public class JKLatch : Latch
 {
     protected override bool Evaluate()
     {
@@ -9,14 +7,14 @@ public class RSLatch : Latch
             case (false, false):
                 return outputs[0];
 
-            case (false, true):
+            case (true, false):
                 return true;
 
-            case (true, false):
+            case (false, true):
                 return false;
 
             case (true, true):
-                throw new ArgumentException();
+                return !outputs[0];
         }
     }
 }
