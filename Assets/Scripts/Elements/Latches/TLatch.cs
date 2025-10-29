@@ -1,4 +1,4 @@
-public class TLatch : Latch
+public class TLatch : Bistable
 {
     protected override bool Evaluate()
     {

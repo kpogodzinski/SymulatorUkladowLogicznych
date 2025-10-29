@@ -1,4 +1,4 @@
-public class JKLatch : Latch
+public class JKLatch : Bistable
 {
     protected override bool Evaluate()
     {

@@ -1,6 +1,6 @@
 using System;
 
-public class RSLatch : Latch
+public class RSLatch : Bistable
 {
     protected override bool Evaluate()
     {

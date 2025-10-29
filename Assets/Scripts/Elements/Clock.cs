@@ -13,7 +13,7 @@ public class Clock : Element
 
     private void Start()
     {
-        InvokeRepeating(nameof(Pulse), 0f, frequency / 2f);
+        InvokeRepeating(nameof(Pulse), 0f, 1f / frequency / 2f);
     }
 
     private void Update()

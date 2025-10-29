@@ -1,12 +1,23 @@
 using System;
 using UnityEngine;
 
-public abstract class Latch : Element
+public abstract class Bistable : Element
 {
+    [SerializeField]
+    protected bool clockPresent;
+    protected bool previousClockSignal;
+    protected bool currentClockSignal;
+
     protected abstract bool Evaluate();
 
     protected void Update()
     {
+        if (clockPresent)
+        {
+            previousClockSignal = currentClockSignal;
+            currentClockSignal = inputs[^1];
+        }
+
         try
         {
             outputs[0] = Evaluate();
