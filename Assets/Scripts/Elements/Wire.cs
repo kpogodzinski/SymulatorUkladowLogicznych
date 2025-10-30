@@ -100,8 +100,6 @@ public class Wire : MonoBehaviour
             lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position);
         }
 
-        
-
         ////////////////// COLLIDER SETTINGS //////////////////
         Vector2 direction = (lr.GetPosition(1) - lr.GetPosition(0)).normalized;
         Vector2 perpDirection = Vector2.Perpendicular(direction);
@@ -122,9 +120,9 @@ public class Wire : MonoBehaviour
     {
         if (target != null)
         {
-            if (targetInputIndex < 0) // if target is an external pin
-                Destroy(target);
-            else
+            if (targetInputIndex < 0)
+                target.GetComponent<Pin>().SetSignal(false);
+            else if (target.GetComponent<Element>().GetInputCount() > 0)
                 target.GetComponent<Element>().SetInput(targetInputIndex, false);
         }
     }
