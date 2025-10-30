@@ -9,7 +9,7 @@ public class DeleteObject : MonoBehaviour
         if (hit.collider != null) 
         {
             GameObject go = hit.collider.gameObject;
-            if (go.CompareTag("Element") || go.CompareTag("Wire"))
+            if (go.CompareTag("Element") || go.CompareTag("Wire") || go.CompareTag("ExternalPin"))
                 Destroy(go);
         }
     }

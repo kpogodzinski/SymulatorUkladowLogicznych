@@ -31,6 +31,7 @@ public class CutWire : MonoBehaviour
             wire2.SetTargetIndex(wire.GetTargetIndex());
             wire2.SetConnected(true);
 
+            wire.transform.parent = pin.transform;
             wire.gameObject.SetActive(false);
         }
     }
