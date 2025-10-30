@@ -4,8 +4,8 @@ using static Unity.VisualScripting.Member;
 
 public class Wire : MonoBehaviour
 {
-    private Element source;
-    private Element target;
+    private GameObject source;
+    private GameObject target;
     private int sourceOutputIndex;
     private int targetInputIndex;
     private bool connected;
@@ -13,14 +13,24 @@ public class Wire : MonoBehaviour
     private LineRenderer lr;
     private PolygonCollider2D pc;
 
-    public void SetSource(Element source)
+    public void SetSource(GameObject source)
     {
         this.source = source;
     }
 
-    public void SetTarget(Element target)
+    public GameObject GetSource()
+    {
+        return source;
+    }
+
+    public void SetTarget(GameObject target)
     {
         this.target = target;
+    }
+
+    public GameObject GetTarget()
+    {
+        return target;
     }
 
     public void SetSourceIndex(int index)
@@ -31,6 +41,16 @@ public class Wire : MonoBehaviour
     public void SetTargetIndex(int index)
     {
         targetInputIndex = index;
+    }
+
+    public int GetSourceIndex()
+    {
+        return sourceOutputIndex;
+    }
+
+    public int GetTargetIndex()
+    {
+        return targetInputIndex;
     }
 
     public void SetConnected(bool connected)
@@ -54,14 +74,40 @@ public class Wire : MonoBehaviour
             return;
         }
 
-        bool signal = source.GetOutput(sourceOutputIndex);
-        target.SetInput(targetInputIndex, signal);
+        bool signal;
 
-        int childCount = source.transform.childCount;
-        lr.SetPosition(0, source.transform.GetChild(source.GetInputCount() + sourceOutputIndex).position);
-        lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position);
+        if (sourceOutputIndex < 0) // if source is an external pin
+        {
+            signal = source.GetComponent<Pin>().GetSignal();
+            lr.SetPosition(0, source.transform.position);
+            lr.startColor = lr.endColor = source.GetComponent<SpriteRenderer>().color;
+        }
+        else
+        {
+            signal = source.GetComponent<Element>().GetOutput(sourceOutputIndex);
+            lr.SetPosition(0, source.transform.GetChild(source.GetComponent<Element>().GetInputCount() + sourceOutputIndex).position);
+            lr.startColor = lr.endColor = source.transform.GetChild(source.GetComponent<Element>().GetInputCount() + sourceOutputIndex).GetComponent<SpriteRenderer>().color;
+        }
+
+        if (targetInputIndex < 0) // if target is an external pin
+        {
+            target.GetComponent<Pin>().SetSignal(signal);
+            lr.SetPosition(1, target.transform.position);
+        }
+        else
+        {
+            target.GetComponent<Element>().SetInput(targetInputIndex, signal);
+            lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position);
+        }
+
+        //target.GetComponent<Element>().SetInput(targetInputIndex, signal);
+
+        //lr.SetPosition(0, source.transform.GetChild(source.GetComponent<Element>().GetInputCount() + sourceOutputIndex).position);
+        //lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position);
+
         lr.startWidth = (source.transform.localScale.x / 5) * transform.parent.localScale.x;
 
+        ////////////////// COLLIDER SETTINGS //////////////////
         Vector2 direction = (lr.GetPosition(1) - lr.GetPosition(0)).normalized;
         Vector2 perpDirection = Vector2.Perpendicular(direction);
         float lineWidth = lr.startWidth;
@@ -75,11 +121,18 @@ public class Wire : MonoBehaviour
 
         });
         pc.offset = -1 * lr.transform.position;
-        lr.startColor = lr.endColor = source.transform.GetChild(source.GetInputCount() + sourceOutputIndex).GetComponent<SpriteRenderer>().color;
+        ///////////////////////////////////////////////////////
+
+        //lr.startColor = lr.endColor = source.transform.GetChild(source.GetComponent<Element>().GetInputCount() + sourceOutputIndex).GetComponent<SpriteRenderer>().color;
     }
     private void OnDestroy()
     {
         if (target != null)
-            target.SetInput(targetInputIndex, false);
+        {
+            if (targetInputIndex < 0) // if target is an external pin
+                Destroy(target);
+            else
+                target.GetComponent<Element>().SetInput(targetInputIndex, false);
+        }
     }
 }

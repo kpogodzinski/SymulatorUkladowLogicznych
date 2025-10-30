@@ -22,9 +22,9 @@ public class Wiring : MonoBehaviour
             source = hit.collider.gameObject;
             if (/*source.CompareTag("InputPin") || */source.CompareTag("OutputPin") && source.transform.parent.CompareTag("Element"))
             {
-                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
+                Vector2 touchPosition = (Vector2)Camera.main.ScreenToWorldPoint(touch.position);
                 wire = Instantiate(prefab, workspace.transform);
-                wire.transform.position = ray.origin;
+                wire.transform.position = (Vector2)ray.origin;
                 wire.SetSourceIndex(source.transform.GetSiblingIndex() - source.GetComponentInParent<Element>().GetInputCount());
 
                 lr = wire.GetComponent<LineRenderer>();
@@ -59,8 +59,8 @@ public class Wiring : MonoBehaviour
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
                 lr.SetPosition(1, target.transform.position);
 
-                wire.SetSource(source.transform.parent.GetComponent<Element>());
-                wire.SetTarget(target.transform.parent.GetComponent<Element>());
+                wire.SetSource(source.transform.parent.gameObject);
+                wire.SetTarget(target.transform.parent.gameObject);
                 wire.SetConnected(true);
 
                 int index = target.transform.GetSiblingIndex();
@@ -87,6 +87,9 @@ public class Wiring : MonoBehaviour
 
     private void Update()
     {
+        if (!PlayerPrefs.GetString("TouchMode").Equals("Wiring"))
+            return;
+
         if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);

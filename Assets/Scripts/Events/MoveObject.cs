@@ -37,8 +37,8 @@ public class MoveObject : MonoBehaviour
             objectMoving = true;
 
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-            
-            if (hit.collider.gameObject.CompareTag("Element"))
+
+            if (hit.collider.gameObject.CompareTag("Element") || hit.collider.gameObject.CompareTag("ExternalPin"))
             {
                 if (!PlayerPrefs.GetString("TouchMode").Equals("Moving"))
                     return;

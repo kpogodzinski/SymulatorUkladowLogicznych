@@ -9,6 +9,7 @@ TagManager:
   - InputPin
   - NewElement
   - Wire
+  - ExternalPin
   layers:
   - Default
   - TransparentFX

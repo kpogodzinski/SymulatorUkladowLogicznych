@@ -33,7 +33,10 @@ public class CameraMovement : MonoBehaviour
 
     private void Update()
     {
-        if (PlayerPrefs.GetString("TouchMode").Equals("Camera") && Input.touchCount == 1)
+        if (!PlayerPrefs.GetString("TouchMode").Equals("Camera"))
+            return;
+
+        if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);
 
