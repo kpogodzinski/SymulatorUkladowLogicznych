@@ -15,6 +15,7 @@ public class CutWire : MonoBehaviour
             Wire wire = hit.collider.GetComponent<Wire>();
             GameObject pin = Instantiate(pinPrefab, (Vector2)Camera.main.ScreenToWorldPoint(touch.position), Quaternion.identity, wire.transform.parent);
             pin.tag = "ExternalPin";
+            pin.transform.localScale /= 2f;
             pin.AddComponent<Pin>();
 
             Wire wire1 = Instantiate(wire, wire.transform.parent);
