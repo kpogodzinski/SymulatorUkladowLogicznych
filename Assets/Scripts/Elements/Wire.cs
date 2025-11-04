@@ -108,11 +108,11 @@ public class Wire : MonoBehaviour
         float lineWidth = lr.startWidth / transform.parent.localScale.x;
         pc.SetPath(0, new List<Vector2>()
         {
-            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(1) + lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(1) - lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(0) - lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection
+            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection + 0.1f * direction,
+            (Vector2)lr.GetPosition(1) + lineWidth * perpDirection - 0.1f * direction,
+            (Vector2)lr.GetPosition(1) - lineWidth * perpDirection - 0.1f * direction,
+            (Vector2)lr.GetPosition(0) - lineWidth * perpDirection + 0.1f * direction,
+            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection + 0.1f * direction
 
         });
         ///////////////////////////////////////////////////////
