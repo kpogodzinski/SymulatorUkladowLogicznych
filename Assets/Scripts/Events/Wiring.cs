@@ -24,7 +24,6 @@ public class Wiring : MonoBehaviour
             {
                 Vector2 touchPosition = (Vector2)Camera.main.ScreenToWorldPoint(touch.position);
                 wire = Instantiate(prefab, workspace.transform);
-                wire.transform.position = (Vector2)ray.origin;
 
                 lr = wire.GetComponent<LineRenderer>();
                 lr.startColor = Color.black;
