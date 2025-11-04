@@ -105,7 +105,7 @@ public class Wire : MonoBehaviour
         ////////////////// COLLIDER SETTINGS //////////////////
         Vector2 direction = (lr.GetPosition(1) - lr.GetPosition(0)).normalized;
         Vector2 perpDirection = Vector2.Perpendicular(direction);
-        float lineWidth = lr.startWidth;
+        float lineWidth = lr.startWidth / transform.parent.localScale.x;
         pc.SetPath(0, new List<Vector2>()
         {
             (Vector2)lr.GetPosition(0) + lineWidth * perpDirection,
