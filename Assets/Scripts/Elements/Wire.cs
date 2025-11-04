@@ -73,47 +73,48 @@ public class Wire : MonoBehaviour
             return;
         }
 
-        bool signal;
+        transform.localPosition = -transform.parent.position / transform.parent.localScale.x;
         lr.startWidth = source.transform.localScale.x / 5 * transform.parent.localScale.x;
+        
+        bool signal;
         if (sourceOutputIndex < 0) // if source is an external pin
         {
             signal = source.GetComponent<Pin>().GetSignal();
-            lr.SetPosition(0, source.transform.position);
+            lr.SetPosition(0, source.transform.position / transform.parent.localScale.x);
             lr.startColor = lr.endColor = source.GetComponent<SpriteRenderer>().color;
             lr.startWidth *= 2;
         }
         else
         {
             signal = source.GetComponent<Element>().GetOutput(sourceOutputIndex);
-            lr.SetPosition(0, source.transform.GetChild(source.GetComponent<Element>().GetInputCount() + sourceOutputIndex).position);
+            lr.SetPosition(0, source.transform.GetChild(source.GetComponent<Element>().GetInputCount() + sourceOutputIndex).position / transform.parent.localScale.x);
             lr.startColor = lr.endColor = source.transform.GetChild(source.GetComponent<Element>().GetInputCount() + sourceOutputIndex).GetComponent<SpriteRenderer>().color;
         }
 
         if (targetInputIndex < 0) // if target is an external pin
         {
             target.GetComponent<Pin>().SetSignal(signal);
-            lr.SetPosition(1, target.transform.position);
+            lr.SetPosition(1, target.transform.position / transform.parent.localScale.x);
         }
         else
         {
             target.GetComponent<Element>().SetInput(targetInputIndex, signal);
-            lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position);
+            lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position / transform.parent.localScale.x);
         }
 
         ////////////////// COLLIDER SETTINGS //////////////////
         Vector2 direction = (lr.GetPosition(1) - lr.GetPosition(0)).normalized;
         Vector2 perpDirection = Vector2.Perpendicular(direction);
-        float lineWidth = lr.startWidth;
+        float lineWidth = lr.startWidth / transform.parent.localScale.x;
         pc.SetPath(0, new List<Vector2>()
         {
-            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(1) + lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(1) - lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(0) - lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection
+            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection + 0.1f * direction,
+            (Vector2)lr.GetPosition(1) + lineWidth * perpDirection - 0.1f * direction,
+            (Vector2)lr.GetPosition(1) - lineWidth * perpDirection - 0.1f * direction,
+            (Vector2)lr.GetPosition(0) - lineWidth * perpDirection + 0.1f * direction,
+            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection + 0.1f * direction
 
         });
-        pc.offset = -1 * lr.transform.position;
         ///////////////////////////////////////////////////////
     }
     private void OnDestroy()
