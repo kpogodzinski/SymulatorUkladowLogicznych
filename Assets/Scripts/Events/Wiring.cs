@@ -24,14 +24,15 @@ public class Wiring : MonoBehaviour
             {
                 Vector2 touchPosition = (Vector2)Camera.main.ScreenToWorldPoint(touch.position);
                 wire = Instantiate(prefab, workspace.transform);
+                wire.transform.localPosition = -workspace.transform.position / workspace.transform.localScale.x;
 
                 lr = wire.GetComponent<LineRenderer>();
                 lr.startColor = Color.black;
                 lr.endColor = Color.black;
                 lr.startWidth = (source.transform.localScale.x / 5) * wire.transform.parent.localScale.x;
                 lr.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
-                lr.SetPosition(0, source.transform.position);
-                lr.SetPosition(1, touchPosition);
+                lr.SetPosition(0, source.transform.position / workspace.transform.localScale.x);
+                lr.SetPosition(1, touchPosition / workspace.transform.localScale.x);
 
                 if (source.CompareTag("OutputPin"))
                 {
@@ -59,7 +60,7 @@ public class Wiring : MonoBehaviour
             return;
 
         Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-        lr.SetPosition(1, touchPosition);
+        lr.SetPosition(1, touchPosition / workspace.transform.localScale.x);
     }
 
     private void OnTouchEnded(Touch touch)
@@ -71,7 +72,7 @@ public class Wiring : MonoBehaviour
             target = hit.collider.gameObject;
             if (target.tag.Contains("Pin"))
             {
-                lr.SetPosition(1, target.transform.position);
+                lr.SetPosition(1, target.transform.position / workspace.transform.localScale.x);
 
                 if (target.CompareTag("InputPin") && !source.CompareTag("InputPin"))
                 {
