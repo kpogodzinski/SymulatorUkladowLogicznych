@@ -98,13 +98,40 @@ public class Wiring : MonoBehaviour
                 wire.SetConnected(true);
                 if (source.CompareTag("InputPin") || target.CompareTag("OutputPin"))
                 {
-                    (target, source) = (source, target);
-                    wire.SetSource(source.CompareTag("ExternalPin") ? source : source.transform.parent.gameObject);
-                    wire.SetTarget(target.CompareTag("ExternalPin") ? target : target.transform.parent.gameObject);
+                    (source, target) = (target, source);
+                    wire.Swap();
+                }
 
-                    int temp = wire.GetSourceIndex();
-                    wire.SetSourceIndex(wire.GetTargetIndex());
-                    wire.SetTargetIndex(temp);
+                if (source.CompareTag("ExternalPin"))
+                {
+                    if (source.GetComponent<Pin>().wireOut != null)
+                        source.GetComponent<Pin>().Swap();
+                    source.GetComponent<Pin>().wireOut = wire.gameObject;
+                }
+                if (target.CompareTag("ExternalPin"))  
+                {
+                    if (target.GetComponent<Pin>().wireIn != null)
+                        target.GetComponent<Pin>().Swap();
+                    target.GetComponent<Pin>().wireIn = wire.gameObject;
+                }
+
+                if (source.CompareTag("ExternalPin"))
+                {
+                    var wire = source.GetComponent<Pin>().wireIn;
+                    if (wire != null)
+                    {
+                        if (wire.GetComponent<Wire>().GetSource() == source)
+                            wire.GetComponent<Wire>().Swap();
+                    }
+                }
+                if (target.CompareTag("ExternalPin"))
+                {
+                    var wire = target.GetComponent<Pin>().wireOut;
+                    if (wire != null)
+                    {
+                        if (wire.GetComponent<Wire>().GetSource() != target)
+                            wire.GetComponent<Wire>().Swap();
+                    }
                 }
             }
             else

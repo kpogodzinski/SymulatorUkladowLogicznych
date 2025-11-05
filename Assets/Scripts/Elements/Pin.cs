@@ -3,6 +3,8 @@ using UnityEngine;
 public class Pin : MonoBehaviour
 {
     private bool signal;
+    public GameObject wireIn;
+    public GameObject wireOut;
 
     public void SetSignal(bool signal)
     {
@@ -12,6 +14,11 @@ public class Pin : MonoBehaviour
     public bool GetSignal()
     {
         return signal;
+    }
+
+    public void Swap()
+    {
+        (wireIn, wireOut) = (wireOut, wireIn);
     }
 
     private void Update()
