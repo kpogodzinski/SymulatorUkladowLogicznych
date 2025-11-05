@@ -32,19 +32,19 @@ public class WorkspaceScaling : MonoBehaviour
         transform.position = newPosition;
     }
 
-    private void OnTouchEnded()
-    {
+    //private void OnTouchEnded()
+    //{
 
-    }
+    //}
 
     private void Update()
     {
-        if (/*PlayerPrefs.GetString("TouchMode").Equals("Camera") && */Input.touchCount == 2)
+        if (Input.touchCount == 2)
         {
             Touch touch0 = Input.GetTouch(0);
             Touch touch1 = Input.GetTouch(1);
 
-            if (/*touch0.phase == TouchPhase.Began && */touch1.phase == TouchPhase.Began)
+            if (touch0.phase == TouchPhase.Began || touch1.phase == TouchPhase.Began)
             {
                 if (EventSystem.current.IsPointerOverGameObject(touch0.fingerId) || EventSystem.current.IsPointerOverGameObject(touch1.fingerId))
                 {
@@ -66,8 +66,12 @@ public class WorkspaceScaling : MonoBehaviour
             else if (touch0.phase == TouchPhase.Ended || touch0.phase == TouchPhase.Canceled
                 || touch1.phase == TouchPhase.Ended || touch1.phase == TouchPhase.Canceled)
             {
-                OnTouchEnded();
+                //OnTouchEnded();
             }
+        }
+        else
+        {
+            beganOverUI = false;
         }
     }
 }
