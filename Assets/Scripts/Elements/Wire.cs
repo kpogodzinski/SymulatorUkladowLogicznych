@@ -57,6 +57,11 @@ public class Wire : MonoBehaviour
         this.connected = connected;
     }
 
+    public void Swap()
+    {
+        (source, target, sourceOutputIndex, targetInputIndex) = (target, source, targetInputIndex, sourceOutputIndex);
+    }
+
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();
@@ -72,10 +77,10 @@ public class Wire : MonoBehaviour
                 Destroy(gameObject);
             return;
         }
-
+        
         transform.localPosition = -transform.parent.position / transform.parent.localScale.x;
         lr.startWidth = source.transform.localScale.x / 5 * transform.parent.localScale.x;
-        
+
         bool signal;
         if (sourceOutputIndex < 0) // if source is an external pin
         {
@@ -117,6 +122,7 @@ public class Wire : MonoBehaviour
         });
         ///////////////////////////////////////////////////////
     }
+
     private void OnDestroy()
     {
         if (target != null)

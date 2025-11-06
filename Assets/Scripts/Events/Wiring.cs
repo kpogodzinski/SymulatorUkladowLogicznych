@@ -98,13 +98,56 @@ public class Wiring : MonoBehaviour
                 wire.SetConnected(true);
                 if (source.CompareTag("InputPin") || target.CompareTag("OutputPin"))
                 {
-                    (target, source) = (source, target);
-                    wire.SetSource(source.CompareTag("ExternalPin") ? source : source.transform.parent.gameObject);
-                    wire.SetTarget(target.CompareTag("ExternalPin") ? target : target.transform.parent.gameObject);
+                    (source, target) = (target, source);
+                    wire.Swap();
+                }
 
-                    int temp = wire.GetSourceIndex();
-                    wire.SetSourceIndex(wire.GetTargetIndex());
-                    wire.SetTargetIndex(temp);
+                if (source.CompareTag("ExternalPin"))
+                {
+                    if (source.GetComponent<Pin>().wireOut != null)
+                        source.GetComponent<Pin>().Swap();
+                    source.GetComponent<Pin>().wireOut = wire.gameObject;
+                }
+                if (target.CompareTag("ExternalPin"))  
+                {
+                    if (target.GetComponent<Pin>().wireIn != null)
+                        target.GetComponent<Pin>().Swap();
+                    target.GetComponent<Pin>().wireIn = wire.gameObject;
+                }
+
+                if (source.CompareTag("OutputPin") && target.CompareTag("ExternalPin"))
+                {
+                    var tempTarget = target;
+                    var tempWire = tempTarget.GetComponent<Pin>().wireOut;
+                    while (tempWire != null)
+                    {
+                        if (tempWire.GetComponent<Wire>().GetSource() != tempTarget)
+                        {
+                            tempWire.GetComponent<Wire>().Swap();
+                            if (tempWire.GetComponent<Wire>().GetTarget().CompareTag("ExternalPin"))
+                            {
+                                tempWire.GetComponent<Wire>().GetTarget().GetComponent<Pin>().Swap();
+                            }
+                        }
+
+                        tempTarget = tempWire.GetComponent<Wire>().GetTarget();
+                        if (tempTarget.CompareTag("ExternalPin"))
+                        {
+                            if (tempWire == tempTarget.GetComponent<Pin>().wireOut)
+                            {
+                                tempTarget.GetComponent<Pin>().Swap();
+                                tempWire = null;
+                            }
+                            else 
+                            {
+                                tempWire = tempTarget.GetComponent<Pin>().wireOut;
+                            }
+                        }
+                        else
+                        {
+                            tempWire = null;
+                        }
+                    }
                 }
             }
             else
