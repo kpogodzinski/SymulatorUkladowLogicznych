@@ -115,22 +115,38 @@ public class Wiring : MonoBehaviour
                     target.GetComponent<Pin>().wireIn = wire.gameObject;
                 }
 
-                if (source.CompareTag("ExternalPin"))
+                if (source.CompareTag("OutputPin") && target.CompareTag("ExternalPin"))
                 {
-                    var wire = source.GetComponent<Pin>().wireIn;
-                    if (wire != null)
+                    var tempTarget = target;
+                    var tempWire = tempTarget.GetComponent<Pin>().wireOut;
+                    while (tempWire != null)
                     {
-                        if (wire.GetComponent<Wire>().GetSource() == source)
-                            wire.GetComponent<Wire>().Swap();
-                    }
-                }
-                if (target.CompareTag("ExternalPin"))
-                {
-                    var wire = target.GetComponent<Pin>().wireOut;
-                    if (wire != null)
-                    {
-                        if (wire.GetComponent<Wire>().GetSource() != target)
-                            wire.GetComponent<Wire>().Swap();
+                        if (tempWire.GetComponent<Wire>().GetSource() != tempTarget)
+                        {
+                            tempWire.GetComponent<Wire>().Swap();
+                            if (tempWire.GetComponent<Wire>().GetTarget().CompareTag("ExternalPin"))
+                            {
+                                tempWire.GetComponent<Wire>().GetTarget().GetComponent<Pin>().Swap();
+                            }
+                        }
+
+                        tempTarget = tempWire.GetComponent<Wire>().GetTarget();
+                        if (tempTarget.CompareTag("ExternalPin"))
+                        {
+                            if (tempWire == tempTarget.GetComponent<Pin>().wireOut)
+                            {
+                                tempTarget.GetComponent<Pin>().Swap();
+                                tempWire = null;
+                            }
+                            else 
+                            {
+                                tempWire = tempTarget.GetComponent<Pin>().wireOut;
+                            }
+                        }
+                        else
+                        {
+                            tempWire = null;
+                        }
                     }
                 }
             }
