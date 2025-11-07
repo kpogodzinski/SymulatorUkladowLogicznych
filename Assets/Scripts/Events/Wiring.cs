@@ -20,20 +20,36 @@ public class Wiring : MonoBehaviour
         if (hit.collider != null)
         {
             source = hit.collider.gameObject;
-            if (/*source.CompareTag("InputPin") || */source.CompareTag("OutputPin") && source.transform.parent.CompareTag("Element"))
+            if (source.tag.Contains("Pin"))
             {
-                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
+                Vector2 touchPosition = (Vector2)Camera.main.ScreenToWorldPoint(touch.position);
                 wire = Instantiate(prefab, workspace.transform);
-                wire.transform.position = ray.origin;
-                wire.SetSourceIndex(source.transform.GetSiblingIndex() - source.GetComponentInParent<Element>().GetInputCount());
+                wire.transform.localPosition = -workspace.transform.position / workspace.transform.localScale.x;
 
                 lr = wire.GetComponent<LineRenderer>();
                 lr.startColor = Color.black;
                 lr.endColor = Color.black;
-                lr.startWidth = (source.transform.localScale.x / 5) * wire.transform.parent.localScale.x;
+                lr.startWidth = (source.transform.localScale.x / 5) * workspace.transform.localScale.x;
                 lr.material = new Material(Shader.Find("Legacy Shaders/Particles/Alpha Blended Premultiply"));
-                lr.SetPosition(0, source.transform.position);
-                lr.SetPosition(1, touchPosition);
+                lr.SetPosition(0, source.transform.position / workspace.transform.localScale.x);
+                lr.SetPosition(1, touchPosition / workspace.transform.localScale.x);
+
+                if (source.CompareTag("OutputPin"))
+                {
+                    wire.SetSource(source.transform.parent.gameObject);
+                    wire.SetSourceIndex(source.transform.GetSiblingIndex() - source.GetComponentInParent<Element>().GetInputCount());
+                }
+                else if (source.CompareTag("InputPin"))
+                {
+                    wire.SetSource(source.transform.parent.gameObject);
+                    wire.SetSourceIndex(source.transform.GetSiblingIndex());
+                }
+                else
+                {
+                    lr.startWidth *= 2f;
+                    wire.SetSource(source);
+                    wire.SetSourceIndex(-1);
+                }
             }
         }
     }
@@ -44,7 +60,7 @@ public class Wiring : MonoBehaviour
             return;
 
         Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-        lr.SetPosition(1, touchPosition);
+        lr.SetPosition(1, touchPosition / workspace.transform.localScale.x);
     }
 
     private void OnTouchEnded(Touch touch)
@@ -54,17 +70,85 @@ public class Wiring : MonoBehaviour
         if (hit.collider != null && lr != null)
         {
             target = hit.collider.gameObject;
-            if (target.CompareTag("InputPin") && target.transform.parent.CompareTag("Element")/* || target.CompareTag("OutputPin")*/)
+            if (target.tag.Contains("Pin"))
             {
-                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-                lr.SetPosition(1, target.transform.position);
+                lr.SetPosition(1, target.transform.position / workspace.transform.localScale.x);
 
-                wire.SetSource(source.transform.parent.GetComponent<Element>());
-                wire.SetTarget(target.transform.parent.GetComponent<Element>());
+                if (target.CompareTag("InputPin") && !source.CompareTag("InputPin"))
+                {
+                    wire.SetTarget(target.transform.parent.gameObject);
+                    wire.SetTargetIndex(target.transform.GetSiblingIndex());
+                }
+                else if (target.CompareTag("OutputPin") && !source.CompareTag("OutputPin"))
+                {
+                    wire.SetTarget(target.transform.parent.gameObject);
+                    wire.SetTargetIndex(target.transform.GetSiblingIndex() - target.GetComponentInParent<Element>().GetInputCount());
+                }
+                else if (target.CompareTag("ExternalPin"))
+                {
+                    wire.SetTarget(target);
+                    wire.SetTargetIndex(-1);
+                }
+                else
+                {
+                    if (wire != null)
+                        Destroy(wire.gameObject);
+                }
+
                 wire.SetConnected(true);
+                if (source.CompareTag("InputPin") || target.CompareTag("OutputPin"))
+                {
+                    (source, target) = (target, source);
+                    wire.Swap();
+                }
 
-                int index = target.transform.GetSiblingIndex();
-                wire.SetTargetIndex(index);
+                if (source.CompareTag("ExternalPin"))
+                {
+                    if (source.GetComponent<Pin>().wireOut != null)
+                        source.GetComponent<Pin>().Swap();
+                    source.GetComponent<Pin>().wireOut = wire.gameObject;
+                }
+                if (target.CompareTag("ExternalPin"))  
+                {
+                    if (target.GetComponent<Pin>().wireIn != null)
+                        target.GetComponent<Pin>().Swap();
+                    target.GetComponent<Pin>().wireIn = wire.gameObject;
+                }
+
+                if (source.CompareTag("OutputPin") && target.CompareTag("ExternalPin"))
+                {
+                    var tempTarget = target;
+                    var tempWire = tempTarget.GetComponent<Pin>().wireOut;
+                    while (tempWire != null)
+                    {
+                        if (tempWire.GetComponent<Wire>().GetSource() != tempTarget)
+                        {
+                            tempWire.GetComponent<Wire>().Swap();
+                            if (tempWire.GetComponent<Wire>().GetTarget().CompareTag("ExternalPin"))
+                            {
+                                tempWire.GetComponent<Wire>().GetTarget().GetComponent<Pin>().Swap();
+                            }
+                        }
+
+                        tempTarget = tempWire.GetComponent<Wire>().GetTarget();
+                        if (tempTarget.CompareTag("ExternalPin"))
+                        {
+                            if (tempWire == tempTarget.GetComponent<Pin>().wireOut)
+                            {
+                                tempTarget.GetComponent<Pin>().Swap();
+                                tempWire = null;
+                            }
+                            else 
+                            {
+                                tempWire = tempTarget.GetComponent<Pin>().wireOut;
+                            }
+                        }
+                        else
+                        {
+                            tempWire = null;
+                        }
+                    }
+                }
             }
             else
             {
@@ -84,9 +168,11 @@ public class Wiring : MonoBehaviour
         target = null;
     }
 
-
     private void Update()
     {
+        if (!PlayerPrefs.GetString("TouchMode").Equals("Wiring"))
+            return;
+
         if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);

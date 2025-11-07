@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
 
 public class Wire : MonoBehaviour
 {
-    private Element source;
-    private Element target;
+    private GameObject source;
+    private GameObject target;
     private int sourceOutputIndex;
     private int targetInputIndex;
     private bool connected;
@@ -13,14 +12,24 @@ public class Wire : MonoBehaviour
     private LineRenderer lr;
     private PolygonCollider2D pc;
 
-    public void SetSource(Element source)
+    public void SetSource(GameObject source)
     {
         this.source = source;
     }
 
-    public void SetTarget(Element target)
+    public GameObject GetSource()
+    {
+        return source;
+    }
+
+    public void SetTarget(GameObject target)
     {
         this.target = target;
+    }
+
+    public GameObject GetTarget()
+    {
+        return target;
     }
 
     public void SetSourceIndex(int index)
@@ -33,9 +42,24 @@ public class Wire : MonoBehaviour
         targetInputIndex = index;
     }
 
+    public int GetSourceIndex()
+    {
+        return sourceOutputIndex;
+    }
+
+    public int GetTargetIndex()
+    {
+        return targetInputIndex;
+    }
+
     public void SetConnected(bool connected)
     {
         this.connected = connected;
+    }
+
+    public void Swap()
+    {
+        (source, target, sourceOutputIndex, targetInputIndex) = (target, source, targetInputIndex, sourceOutputIndex);
     }
 
     private void Awake()
@@ -53,33 +77,60 @@ public class Wire : MonoBehaviour
                 Destroy(gameObject);
             return;
         }
+        
+        transform.localPosition = -transform.parent.position / transform.parent.localScale.x;
+        lr.startWidth = source.transform.localScale.x / 5 * transform.parent.localScale.x;
 
-        bool signal = source.GetOutput(sourceOutputIndex);
-        target.SetInput(targetInputIndex, signal);
+        bool signal;
+        if (sourceOutputIndex < 0) // if source is an external pin
+        {
+            signal = source.GetComponent<Pin>().GetSignal();
+            lr.SetPosition(0, source.transform.position / transform.parent.localScale.x);
+            lr.startColor = lr.endColor = source.GetComponent<SpriteRenderer>().color;
+            lr.startWidth *= 2;
+        }
+        else
+        {
+            signal = source.GetComponent<Element>().GetOutput(sourceOutputIndex);
+            lr.SetPosition(0, source.transform.GetChild(source.GetComponent<Element>().GetInputCount() + sourceOutputIndex).position / transform.parent.localScale.x);
+            lr.startColor = lr.endColor = source.transform.GetChild(source.GetComponent<Element>().GetInputCount() + sourceOutputIndex).GetComponent<SpriteRenderer>().color;
+        }
 
-        int childCount = source.transform.childCount;
-        lr.SetPosition(0, source.transform.GetChild(source.GetInputCount() + sourceOutputIndex).position);
-        lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position);
-        lr.startWidth = (source.transform.localScale.x / 5) * transform.parent.localScale.x;
+        if (targetInputIndex < 0) // if target is an external pin
+        {
+            target.GetComponent<Pin>().SetSignal(signal);
+            lr.SetPosition(1, target.transform.position / transform.parent.localScale.x);
+        }
+        else
+        {
+            target.GetComponent<Element>().SetInput(targetInputIndex, signal);
+            lr.SetPosition(1, target.transform.GetChild(targetInputIndex).position / transform.parent.localScale.x);
+        }
 
+        ////////////////// COLLIDER SETTINGS //////////////////
         Vector2 direction = (lr.GetPosition(1) - lr.GetPosition(0)).normalized;
         Vector2 perpDirection = Vector2.Perpendicular(direction);
-        float lineWidth = lr.startWidth;
+        float lineWidth = lr.startWidth / transform.parent.localScale.x;
         pc.SetPath(0, new List<Vector2>()
         {
-            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(1) + lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(1) - lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(0) - lineWidth * perpDirection,
-            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection
+            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection + 0.1f * direction,
+            (Vector2)lr.GetPosition(1) + lineWidth * perpDirection - 0.1f * direction,
+            (Vector2)lr.GetPosition(1) - lineWidth * perpDirection - 0.1f * direction,
+            (Vector2)lr.GetPosition(0) - lineWidth * perpDirection + 0.1f * direction,
+            (Vector2)lr.GetPosition(0) + lineWidth * perpDirection + 0.1f * direction
 
         });
-        pc.offset = -1 * lr.transform.position;
-        lr.startColor = lr.endColor = source.transform.GetChild(source.GetInputCount() + sourceOutputIndex).GetComponent<SpriteRenderer>().color;
+        ///////////////////////////////////////////////////////
     }
+
     private void OnDestroy()
     {
         if (target != null)
-            target.SetInput(targetInputIndex, false);
+        {
+            if (targetInputIndex < 0)
+                target.GetComponent<Pin>().SetSignal(false);
+            else if (target.GetComponent<Element>().GetInputCount() > 0)
+                target.GetComponent<Element>().SetInput(targetInputIndex, false);
+        }
     }
 }

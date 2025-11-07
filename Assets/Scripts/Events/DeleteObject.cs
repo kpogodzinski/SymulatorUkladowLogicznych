@@ -4,21 +4,21 @@ public class DeleteObject : MonoBehaviour
 {
     private void OnTouchBegan(Touch touch)
     {
-        if (!PlayerPrefs.GetString("TouchMode").Equals("Delete"))
-            return;
-
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
         if (hit.collider != null) 
         {
             GameObject go = hit.collider.gameObject;
-            if (go.CompareTag("Element") || go.CompareTag("Wire"))
+            if (go.CompareTag("Element") || go.CompareTag("Wire") || go.CompareTag("ExternalPin"))
                 Destroy(go);
         }
     }
 
     private void Update()
     {
+        if (!PlayerPrefs.GetString("TouchMode").Equals("Delete"))
+            return;
+
         if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);
