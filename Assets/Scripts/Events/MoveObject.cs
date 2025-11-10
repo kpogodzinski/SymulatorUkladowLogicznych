@@ -40,7 +40,7 @@ public class MoveObject : MonoBehaviour
 
             if (hit.collider.gameObject.CompareTag("Element") || hit.collider.gameObject.CompareTag("ExternalPin"))
             {
-                if (!PlayerPrefs.GetString("TouchMode").Equals("Moving"))
+                if (!PlayerPrefs.GetString("TouchMode").Equals("Selection"))
                     return;
 
                 touchedObject = hit.collider.gameObject;
