@@ -5,7 +5,7 @@ public class SetTouchMode : MonoBehaviour
 {
     private void Awake()
     {
-        PlayerPrefs.SetString("TouchMode", "Moving");
+        PlayerPrefs.SetString("TouchMode", "Selection");
     }
 
     public void Set()

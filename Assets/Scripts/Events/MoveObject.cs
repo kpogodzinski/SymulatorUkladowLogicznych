@@ -6,6 +6,9 @@ public class MoveObject : MonoBehaviour
     [SerializeField]
     private GameObject workspace;
     [SerializeField]
+    private Sprite squareSprite;
+    private GameObject square;
+    [SerializeField]
     private GameObject scrollView;
     private ScrollRect scrollRect;
 
@@ -40,12 +43,25 @@ public class MoveObject : MonoBehaviour
 
             if (hit.collider.gameObject.CompareTag("Element") || hit.collider.gameObject.CompareTag("ExternalPin"))
             {
-                if (!PlayerPrefs.GetString("TouchMode").Equals("Moving"))
+                if (!PlayerPrefs.GetString("TouchMode").Equals("Selection"))
                     return;
 
                 touchedObject = hit.collider.gameObject;
                 Vector2 objectPosition = touchedObject.transform.position;
                 offset = objectPosition - touchPosition;
+
+                square = new GameObject("Square", typeof(SpriteRenderer));
+                square.transform.parent = touchedObject.transform;
+                square.transform.localPosition = Vector3.zero;
+                square.transform.localScale = Vector3.one;
+
+                SpriteRenderer sr = square.GetComponent<SpriteRenderer>();
+                sr.sprite = squareSprite;
+                sr.sortingOrder = -1;
+                sr.color = new Color32(0x70, 0x5E, 0x46, 0xBF);
+                sr.drawMode = SpriteDrawMode.Sliced;
+                sr.size = touchedObject.CompareTag("ExternalPin") ? 
+                    Vector2.one * 2.56f : touchedObject.GetComponent<RectTransform>().rect.size;
             }
             else if (hit.collider.gameObject.CompareTag("NewElement"))
             {
@@ -78,6 +94,8 @@ public class MoveObject : MonoBehaviour
             Destroy(touchedObject);
             scrollRect.enabled = true;
         }
+
+        Destroy(square);
         objectMoving = false;
         touchedObject = null;
     }
