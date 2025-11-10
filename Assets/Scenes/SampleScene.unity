@@ -2460,6 +2460,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   workspace: {fileID: 994368863}
+  squareSprite: {fileID: 21300000, guid: 86f45e4bdb07a6e4f931ade7091a373f, type: 3}
   scrollView: {fileID: 1469182468}
 --- !u!114 &241731689
 MonoBehaviour:
