@@ -2888,8 +2888,9 @@ GameObject:
   - component: {fileID: 417295838}
   - component: {fileID: 417295840}
   - component: {fileID: 417295839}
+  - component: {fileID: 417295841}
   m_Layer: 5
-  m_Name: ScreenshotInfo
+  m_Name: Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2953,6 +2954,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 417295837}
   m_CullTransparentMesh: 1
+--- !u!114 &417295841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 417295837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3ae096e1bd3db74bb8fb985a1ae4621, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeDuration: 0.5
 --- !u!1 &471383860
 GameObject:
   m_ObjectHideFlags: 0
@@ -7473,7 +7487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7775c26cfce6d03469542d28eabe9817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenshotInfo: {fileID: 417295837}
+  popup: {fileID: 417295841}
 --- !u!1 &1314691306
 GameObject:
   m_ObjectHideFlags: 0
