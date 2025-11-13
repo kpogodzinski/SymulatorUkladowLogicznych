@@ -39,6 +39,9 @@ public class WorkspaceScaling : MonoBehaviour
 
     private void Update()
     {
+        if (!PlayerPrefs.GetString("TouchMode").Equals("Camera"))
+            return;
+
         if (Input.touchCount == 2)
         {
             Touch touch0 = Input.GetTouch(0);
