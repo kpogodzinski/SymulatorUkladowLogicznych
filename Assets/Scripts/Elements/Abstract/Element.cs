@@ -32,7 +32,7 @@ public abstract class Element : MonoBehaviour
         return outputs[index];
     }
 
-    protected List<GameObject> GetChildren()
+    private List<GameObject> GetChildren()
     {
         List<GameObject> list = new();
         for (int i = 0; i < transform.childCount; i++)

@@ -193,10 +193,5 @@ PolygonCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Points:
-    m_Paths:
-    - - {x: 0, y: 0.509759}
-      - {x: -0.48480964, y: 0.15752418}
-      - {x: -0.2996288, y: -0.41240373}
-      - {x: 0.29962888, y: -0.41240367}
-      - {x: 0.4848096, y: 0.15752426}
+    m_Paths: []
   m_UseDelaunayMesh: 0
