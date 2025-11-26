@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RGBLed : Element
 {
-    private void Update()
+    protected override void LateUpdate()
     {
         GetComponent<SpriteChanger>().SetSprite(inputs.Any(input => input) ? 1 : 0);
 
@@ -17,9 +17,6 @@ public class RGBLed : Element
 
         GetComponent<SpriteRenderer>().color = color;
 
-        for (int i = 0; i < inputCount; i++)
-        {
-            pins[i].GetComponent<SpriteRenderer>().color = inputs[i] ? Color.green : Color.red;
-        }
+        base.LateUpdate();
     }
 }

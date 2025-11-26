@@ -10,8 +10,10 @@ public abstract class Bistable : Element
 
     protected abstract bool Evaluate();
 
-    protected void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (clockPresent)
         {
             previousClockSignal = currentClockSignal;
@@ -27,11 +29,5 @@ public abstract class Bistable : Element
         {
             outputs[0] = outputs[1] = false;
         }
-
-        for (int i = 0; i < inputs.Count; i++)
-            pins[i].GetComponent<SpriteRenderer>().color = inputs[i] ? Color.green : Color.red;
-
-        for (int i = 0; i < outputs.Count; i++)
-            pins[i + inputs.Count].GetComponent<SpriteRenderer>().color = outputs[i] ? Color.green : Color.red;
     }
 }
