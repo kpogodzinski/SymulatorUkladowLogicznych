@@ -15,6 +15,7 @@ public class Popup : MonoBehaviour
 
     public void ShowPopup(string text, float duration)
     {
+        StopAllCoroutines();
         gameObject.SetActive(true);
         StartCoroutine(PopupHandler(text, duration));
     }
