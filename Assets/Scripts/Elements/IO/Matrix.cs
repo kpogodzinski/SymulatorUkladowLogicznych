@@ -44,9 +44,11 @@ public class Matrix : Element
         }
     }
 
-    private void LateUpdate()
+    protected override void Update()
     {
-        for (int i = 0; i < inputCount;  i++)
+        base.Update();
+
+        for (int i = 0; i < inputCount; i++)
         {
             if (i < 6)
             {
@@ -64,11 +66,6 @@ public class Matrix : Element
                     OnMatrixChanged();
                 }
             }
-        }
-
-        for (int i = 0; i < inputCount; i++)
-        {
-            pins[i].GetComponent<SpriteRenderer>().color = inputs[i] ? Color.green : Color.red;
         }
     }
 }

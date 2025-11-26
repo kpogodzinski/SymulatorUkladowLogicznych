@@ -61,7 +61,7 @@ public class SevenSeg : Element
         }
     }
 
-    private void LateUpdate()
+    protected override void LateUpdate()
     {
         for (int i = 0; i < inputCount; i++)
         {

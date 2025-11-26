@@ -73,12 +73,20 @@ public abstract class Element : MonoBehaviour
         pins = GetChildren();
     }
 
-    protected void Update()
+    protected virtual void Update()
     {
         for (int i = 0; i < inputCount; i++)
         {
             inputs[i] = newInputs[i];
             newInputs[i] = false;
         }
+    }
+
+    protected virtual void LateUpdate()
+    {
+        for (int i = 0; i < inputCount; i++)
+            pins[i].GetComponent<SpriteRenderer>().color = inputs[i] ? Color.green : Color.red;
+        for (int i = 0; i < outputCount; i++)
+            pins[i+inputCount].GetComponent<SpriteRenderer>().color = outputs[i] ? Color.green : Color.red;
     }
 }
