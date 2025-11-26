@@ -44,7 +44,7 @@ public class Matrix : Element
         }
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         for (int i = 0; i < inputCount;  i++)
         {

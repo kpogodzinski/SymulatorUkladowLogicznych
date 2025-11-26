@@ -16,7 +16,7 @@ public class Clock : Element
         InvokeRepeating(nameof(Pulse), 0f, 1f / frequency / 2f);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         pins[0].GetComponent<SpriteRenderer>().color = outputs[0] ? Color.green : Color.red;
     }

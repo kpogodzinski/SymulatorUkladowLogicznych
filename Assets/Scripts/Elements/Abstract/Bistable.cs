@@ -10,7 +10,7 @@ public abstract class Bistable : Element
 
     protected abstract bool Evaluate();
 
-    protected void Update()
+    protected void LateUpdate()
     {
         if (clockPresent)
         {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RGBLed : Element
 {
-    private void Update()
+    private void LateUpdate()
     {
         GetComponent<SpriteChanger>().SetSprite(inputs.Any(input => input) ? 1 : 0);
 

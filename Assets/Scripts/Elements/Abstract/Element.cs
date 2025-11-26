@@ -12,9 +12,11 @@ public abstract class Element : MonoBehaviour
     protected List<bool> outputs;
     protected List<GameObject> pins;
 
+    private List<bool> newInputs;
+
     public void SetInput(int index, bool signal)
     {
-        inputs[index] = signal;
+        newInputs[index] = newInputs[index] || signal;
     }
 
     public bool GetInput(int index)
@@ -45,8 +47,12 @@ public abstract class Element : MonoBehaviour
         if (inputCount > 0)
         {
             inputs = new(inputCount);
+            newInputs = new(inputCount);
             for (int i = 0; i < inputCount; i++)
+            {
                 inputs.Add(false);
+                newInputs.Add(false);
+            }
         }
         else
         {
@@ -65,5 +71,14 @@ public abstract class Element : MonoBehaviour
         }
 
         pins = GetChildren();
+    }
+
+    protected void Update()
+    {
+        for (int i = 0; i < inputCount; i++)
+        {
+            inputs[i] = newInputs[i];
+            newInputs[i] = false;
+        }
     }
 }

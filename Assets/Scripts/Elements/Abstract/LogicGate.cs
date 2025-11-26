@@ -4,7 +4,7 @@ public abstract class LogicGate : Element
 {
     public abstract bool Evaluate();
 
-    protected void Update()
+    protected void LateUpdate()
     {
         outputs[0] = Evaluate();
 

@@ -4,7 +4,7 @@ public class Demux : Element
 {
     private int address;
 
-    private void Update()
+    private void LateUpdate()
     {
         outputs[address] = false;
 

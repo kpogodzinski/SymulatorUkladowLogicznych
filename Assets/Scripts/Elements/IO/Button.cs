@@ -7,7 +7,7 @@ public class Button : Element
         outputs[0] = value;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         pins[0].GetComponent<SpriteRenderer>().color = outputs[0] ? Color.green : Color.red;
     }

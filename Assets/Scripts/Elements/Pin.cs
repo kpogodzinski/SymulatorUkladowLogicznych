@@ -47,7 +47,7 @@ public class Pin : MonoBehaviour
         (wireIn, wireOut) = (wireOut, wireIn);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         connected = wireIn != null && wireOut != null;
         GetComponent<SpriteRenderer>().color = signal ? Color.green : Color.red;

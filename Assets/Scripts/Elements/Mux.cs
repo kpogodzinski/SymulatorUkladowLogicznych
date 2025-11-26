@@ -4,7 +4,7 @@ public class Mux : Element
 {
     private int address;
 
-    private void Update()
+    private void LateUpdate()
     {
         address = 0;
         if (inputs[^3])
