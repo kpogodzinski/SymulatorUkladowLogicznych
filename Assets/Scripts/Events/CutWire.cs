@@ -31,13 +31,13 @@ public class CutWire : MonoBehaviour
             wire2.SetTargetIndex(wire.GetTargetIndex());
             wire2.SetConnected(true);
 
-            pin.GetComponent<Pin>().wireIn = wire1.gameObject;
-            pin.GetComponent<Pin>().wireOut = wire2.gameObject;
+            pin.GetComponent<Pin>().SetWireIn(wire1.gameObject);
+            pin.GetComponent<Pin>().SetWireOut(wire2.gameObject);
 
             if (wire.GetSource().CompareTag("ExternalPin"))
-                wire.GetSource().GetComponent<Pin>().wireOut = wire1.gameObject;
+                wire.GetSource().GetComponent<Pin>().SetWireOut(wire1.gameObject);
             if (wire.GetTarget().CompareTag("ExternalPin"))
-                wire.GetTarget().GetComponent<Pin>().wireIn = wire2.gameObject;
+                wire.GetTarget().GetComponent<Pin>().SetWireIn(wire2.gameObject);
 
             Destroy(wire.gameObject);
         }
