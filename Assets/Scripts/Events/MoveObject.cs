@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ public class MoveObject : MonoBehaviour
     private ScrollRect scrollRect;
 
     private GameObject touchedObject;
+    private string[] tagPriorities;
     private Vector2 offset;
     private bool objectMoving;
 
@@ -21,6 +23,7 @@ public class MoveObject : MonoBehaviour
         touchedObject = null;
         objectMoving = false;
         scrollRect = scrollView.GetComponent<ScrollRect>();
+        tagPriorities = new[] {"NewElement", "Panel", "Element", "ExternalPin"};
     }
 
     public bool IsMoving()
@@ -34,11 +37,21 @@ public class MoveObject : MonoBehaviour
             return;
 
         Ray ray = Camera.main.ScreenPointToRay(touch.position);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
-        if (hit.collider != null)
+        RaycastHit2D[] hits = Physics2D.RaycastAll(ray.origin, ray.direction, Mathf.Infinity);
+        if (hits.Length > 0)
         {
-            objectMoving = true;
+            RaycastHit2D hit = default;
+            foreach (string tag in tagPriorities)
+            {
+                hit = hits.FirstOrDefault(h => h.collider.gameObject.CompareTag(tag));
+                if (hit.collider != null)
+                    break;
+            }
 
+            if (hit.collider == null || hit.collider.gameObject.CompareTag("Panel"))
+                return;
+
+            objectMoving = true;
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
 
             if (hit.collider.gameObject.CompareTag("Element") || hit.collider.gameObject.CompareTag("ExternalPin"))
