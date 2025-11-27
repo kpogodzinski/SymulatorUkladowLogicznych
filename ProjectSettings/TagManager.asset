@@ -10,6 +10,7 @@ TagManager:
   - NewElement
   - Wire
   - ExternalPin
+  - Panel
   layers:
   - Default
   - TransparentFX
