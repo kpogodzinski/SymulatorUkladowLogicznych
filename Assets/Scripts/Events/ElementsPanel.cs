@@ -9,12 +9,15 @@ public class ElementsPanel : MonoBehaviour
     private GameObject elementsPanel;
     [SerializeField]
     private Canvas canvas;
-    private bool visible;
-    private float animationLength;
-    private float width;
     private TextMeshProUGUI buttonText;
 
-    private void Awake()
+    private bool visible;
+    private float animationLength;
+
+    private float width;
+    private float height;
+
+    private void Start()
     {
         visible = false;
         animationLength = 0.5f;
@@ -24,7 +27,10 @@ public class ElementsPanel : MonoBehaviour
         Vector3[] corners = new Vector3[4];
         RectTransform rt = elementsPanel.GetComponent<RectTransform>();
         rt.GetWorldCorners(corners);
-        width = Vector3.Distance(corners[2], corners[1]) * 1.3f;
+        width = Vector3.Distance(corners[2], corners[1]);
+        height = Vector3.Distance(corners[1], corners[0]);
+        BoxCollider2D collider = elementsPanel.GetComponent<BoxCollider2D>();
+        collider.size = new Vector2(width / rt.lossyScale.x, height / rt.lossyScale.y);
     }
 
     private IEnumerator SlidePanel(int direction) // direction: -1 = left, 1 = right
