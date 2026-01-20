@@ -13,7 +13,13 @@ public class InfoWindow : MonoBehaviour
     {
         toggle = GetComponent<Toggle>();
         version = Application.version;
-        infoWindow.transform.GetChild(2).GetChild(1).GetComponent<TextMeshProUGUI>().text = version;
+        foreach (Transform child in infoWindow.transform)
+        {
+            if (child.name.Equals("Version"))
+            {
+                child.GetChild(1).GetComponent<TextMeshProUGUI>().text = version;
+            }
+        }
     }
 
     public void ToggleWindow()
