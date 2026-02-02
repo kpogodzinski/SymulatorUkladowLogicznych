@@ -9536,6 +9536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popup: {fileID: 417295841}
+  canvas: {fileID: 1660842358}
 --- !u!1 &1314691306
 GameObject:
   m_ObjectHideFlags: 0
