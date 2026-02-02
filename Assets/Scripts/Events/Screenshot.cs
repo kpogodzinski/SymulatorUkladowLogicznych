@@ -1,19 +1,55 @@
 using System;
+using System.Collections;
+using System.IO;
 using UnityEngine;
 
 public class Screenshot : MonoBehaviour
 {
     [SerializeField]
     private Popup popup;
+    [SerializeField]
+    private GameObject canvas;
+
+    private void Awake()
+    {
+        string directory = $"{Application.persistentDataPath}/Screenshots";
+        if (!Directory.Exists(directory))
+            Directory.CreateDirectory(directory);
+    }
 
     public void TakeScreenshot()
     {
-        string timestamp = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
-        string name = $"Screenshot_{timestamp}.png";
-        string filename = Application.platform == RuntimePlatform.Android ?
-            $"../../../../DCIM/Screenshots/{name}" : name;
-    
-        ScreenCapture.CaptureScreenshot(filename, 4);
-        popup.ShowPopup($"Screenshot saved as: {filename.Replace("../", "")}.", 2f);
+        StartCoroutine(SaveToGallery());
+    }
+
+    private IEnumerator SaveToGallery()
+    {
+        canvas.GetComponent<Canvas>().enabled = false;
+        yield return new WaitForEndOfFrame();
+
+        string filename = $"Screenshot_{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.png";
+        ScreenCapture.CaptureScreenshot($"Screenshots/{filename}");
+
+        yield return new WaitForEndOfFrame();
+        canvas.GetComponent<Canvas>().enabled = true;
+        yield return new WaitForEndOfFrame();
+
+        try
+        {
+            NativeGallery.SaveImageToGallery(
+                existingMediaPath: $"{Application.persistentDataPath}/Screenshots/{filename}",
+                album: "DigitalCircuit",
+                filename: filename,
+                callback: (success, path) =>
+                {
+                    if (success)
+                        popup.ShowPopup($"Screenshot saved as: {path}", 3f);
+                }
+            );
+        }
+        catch
+        {
+            popup.ShowPopup("There was an error while saving the screenshot.", 3f);
+        }
     }
 }
