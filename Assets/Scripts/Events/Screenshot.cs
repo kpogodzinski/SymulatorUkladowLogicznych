@@ -15,6 +15,9 @@ public class Screenshot : MonoBehaviour
         string directory = $"{Application.persistentDataPath}/Screenshots";
         if (!Directory.Exists(directory))
             Directory.CreateDirectory(directory);
+
+        foreach (string file in Directory.GetFiles(directory))
+            File.Delete(file);
     }
 
     public void TakeScreenshot()
