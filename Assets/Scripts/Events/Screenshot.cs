@@ -37,6 +37,8 @@ public class Screenshot : MonoBehaviour
         canvas.GetComponent<Canvas>().enabled = true;
         yield return new WaitForEndOfFrame();
 
+        yield return new WaitUntil(() => File.Exists($"{Application.persistentDataPath}/Screenshots/{filename}"));
+
         try
         {
             NativeGallery.SaveImageToGallery(
@@ -50,8 +52,9 @@ public class Screenshot : MonoBehaviour
                 }
             );
         }
-        catch
+        catch (Exception e)
         {
+            Debug.LogError(e);
             popup.ShowPopup("There was an error while saving the screenshot.", 3f);
         }
     }
